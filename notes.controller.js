@@ -19,15 +19,19 @@ async function addNote(title){
     }
     notes.push(note)
 
-    await fs.writeFile(notesPath, JSON.stringify(notes));
+    await saveNotes(notes);
     console.log(chalk.green("Note was added"));
 }
 
 
 async function getNotes(){
-    const notes = await fs.readFile(notesPath, {encoding: "utf-8"})
+    const notes = await fs.readFile(notesPath, {encoding: "utf-8"});
     return Array.isArray(JSON.parse(notes)) ? JSON.parse(notes) : [];
     
+}
+
+async function saveNotes(notes){
+    await fs.writeFile(notesPath, JSON.stringify(notes));
 }
 
 // async function remove(id){
@@ -37,8 +41,9 @@ async function getNotes(){
 
 async function remove(id) {
     const arr = await getNotes();
-    console.log(arr);
-    return arr.filter((obj) => obj.id !== id);
+    const items = arr.filter((obj) => obj.id !== id);
+    await saveNotes(items);
+    console.log(chalk.green(`Note id=${id} was deleted success`));
   }
 
 module.exports = {

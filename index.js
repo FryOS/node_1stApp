@@ -35,11 +35,12 @@ yargs.command({
     builder: {
         id: {
             type: "string",
+            describe: "note uniq id",
             demandOption: true
         }
     },
     async handler({id}){
-        console.log( await remove(id));
+        await remove(id);
     }
 })
 
